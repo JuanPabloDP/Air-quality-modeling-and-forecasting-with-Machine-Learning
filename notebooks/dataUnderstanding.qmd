@@ -10,23 +10,71 @@ format:
 editor: source
 ---
 
+```{python}
+import pandas as pd
+```
+
 # Descarga el archivo Datos_maestro_sensores.xlsx de Canvas que contiene información recolectada por los dispositivos de medición de contaminantes
 
 ```{python}
-
+data=pd.read_excel("../data/Datos_maestro_sensores.xlsx")
+data.head()
 ```
+
+El datos incluyen 14 variables y 28,654 observaciones. 
 
 # Descarga el archivo Nomenclatura_Maestro.xlsx para conocer el diccionario de datos.
 
 ```{python}
-
+nom=pd.read_excel("../data/Nomenclatura_Maestro.xlsx")
+nom
 ```
+
+El archivo de nomenclatura contiene la sintaxis y el significado de alguno de los terminos usados. Esto de manera resumida, por lo que es necesario un diccionario que relacione cada variable con su significado explícito. 
 
 # Identificación de las variables de estudio y su relevancia.
 
 ```{python}
-
+dict={
+  "variable": data.columns,
+  "significado": ["[Sensor: A , B, C, D, E]_[Periodo: P1, P2, P3]",
+              "año-mes-día hora:minutos:segundos",
+              "Dióxido de carbono (CO2), partes por millon",
+              "Compuestos Orgánicos Volátiles Totales (TVOC), partes por mil millones",
+              "Índice de Calidad del Aire (1-5), no tiene unidades",
+              "Monóxido de carbono (CO), partes por millon",
+              "Dióxido de azufre (SO2), partes por millon",
+              "Ozono (O3), partes por millon",
+              "Dióxido de nitrógeno (NO2), partes por millon",
+              "Partículas finas en suspensión con un diámetro inferior a 2.5 micrómetros (Particulas PM2.5), micro gramos por metro cúbico",
+              "Material particulado en suspensión con un diámetro de 10 micrómetros o menos (Particulas PM10), micro gramos por metro cúbico",
+              "Temperatura en grados Celsius",
+              "Porcentaje de humedad relativa del aire (%)",
+              "Porcentaje de nivel de batería del sensor (%)"
+             ]
+}
+dict = pd.DataFrame(dict)
+dict.to_excel("../data/Diccionario_Maestro.xlsx")
 ```
+
+## Diccionario de datos
+
+1. sensor_periodo:	[Sensor: A , B, C, D, E]_[Periodo: P1, P2, P3]
+2. datetime:	año-mes-día hora:minutos:segundos
+3. CO2_ppm:	Dióxido de carbono (CO2), partes por millon
+4. TVOC_ppb:	Compuestos Orgánicos Volátiles Totales (TVOC),...
+5. AQI:	Índice de Calidad del Aire (1-5), no tiene uni...
+6. CO_ppm:	Monóxido de carbono (CO), partes por millon
+7. SO2_ppm:	Dióxido de azufre (SO2), partes por millon
+8. O3_ppm:	Ozono (O3), partes por millon
+9. NO2_ppm:	Dióxido de nitrógeno (NO2), partes por millon
+10. PM2_5_ugm3:	Partículas finas en suspensión con un diámetro...
+11. PM10_ugm3:	Material particulado en suspensión con un diám...
+12. temp_C:	Temperatura en grados Celsius
+13. hum_pct:	Porcentaje de humedad relativa del aire (%)
+14. Bat_pct:	Porcentaje de nivel de batería del sensor (%)
+
+Para el problema, la más relevante es el índice de Calidad del Aire (AQI), si asumimos esta como variable de respuesta. En principio los predictores más relevantes son los diferentes compuestos y la temperatura; a menos de que entre algunos de ellos exista una correlación, entonces se mantendrían aquellos compuestos escenciales no correlacionados. Para la fecha y el tiempo se contemplaría su uso dependiendo del tipo de modelo que se planteé. Con respecto al sensor y su periodo, se extraería el identificador del sensor de la variable, para basar el anális en uno de estos; sería necesario verificar si el periodo es relevante para el modelo. Un aspecto a destacar son las variables de porcentaje de humedad relativa del aire y porcentaje de nivel de batería del sensor, puesto que estas puedieran no parecer relevantes, en especial el nivel de batería; sin embargo si se identifica que el nivel de batería del sensor influye en la exactitud de las muestras, esto quiere decir que el error depende del timepo, entonces se podría velar por un modelo de Regresión con errores autorregresivos.
 
 # Consideren filtrar los datos por alguna ubicación específica y basen su análisis en esa ubicación.
 
