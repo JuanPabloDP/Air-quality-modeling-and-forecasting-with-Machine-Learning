@@ -1,0 +1,35 @@
+---
+title: "Comprensión de los datos"
+format:
+   html:
+     toc: true
+     html-math-method: katex
+     embed-resources: true
+     self-contained-math: true
+     df-print: kable
+editor: source
+---
+
+# Descarga el archivo Datos_maestro_sensores.xlsx de Canvas que contiene información recolectada por los dispositivos de medición de contaminantes
+
+```{python}
+
+```
+
+# Descarga el archivo Nomenclatura_Maestro.xlsx para conocer el diccionario de datos.
+
+```{python}
+
+```
+
+# Identificación de las variables de estudio y su relevancia.
+
+```{python}
+
+```
+
+# Consideren filtrar los datos por alguna ubicación específica y basen su análisis en esa ubicación.
+
+```{python}
+
+```
