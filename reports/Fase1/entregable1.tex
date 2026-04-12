@@ -1,0 +1,150 @@
+\documentclass{article}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+
+\title{Fase 1. Comprensión del problema}
+
+\author{
+    Diana Laura Hernández Almeida \\
+    Gonzalo Makenly Higuera Inzunza \\
+    José Alfredo López Torres \\
+    Juan Pablo De La Peña Gonzalez \\
+    Sarah Camila Guzmán Fierro
+}
+
+\date{Marzo 2026}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introducción}
+
+\textbf{Objetivo:} Entender qué es la calidad del aire, cómo se mide y por qué es un problema relevante.
+
+\section*{Actividades}
+
+\subsection{Investigación sobre contaminantes atmosféricos (PM${2.5}$, PM${10}$, O$_3$, NO$_2$, SO$_2$, CO).} 
+    \begin{itemize}
+        \item PM$_{2.5}$: Partículas finas con diámetro menor a 2.5 micrómetros, generadas principalmente por procesos de combustión (vehículos, industria). Pueden penetrar profundamente en los pulmones y causar problemas respiratorios y cardiovasculares.
+        \begin{itemize}
+            \item Valores típicos: ciudad $10$--$35\,\mu g/m^3$, campo $5$--$15\,\mu g/m^3$.
+            \item Valores peligrosos: $>55\,\mu g/m^3$.
+        \end{itemize}
+        
+        \item PM$_{10}$: Partículas con diámetro menor a 10 micrómetros, originadas por polvo, construcción y actividades industriales. Afectan principalmente las vías respiratorias superiores.
+        \begin{itemize}
+            \item Valores típicos: ciudad $20$--$60\,\mu g/m^3$, campo $10$--$30\,\mu g/m^3$.
+            \item Valores peligrosos: $>150\,\mu g/m^3$.
+        \end{itemize}
+        
+        \item O$_3$ (ozono troposférico): Contaminante secundario formado por reacciones entre óxidos de nitrógeno y compuestos orgánicos volátiles en presencia de luz solar. Puede irritar las vías respiratorias y afectar cultivos.
+        \begin{itemize}
+            \item Valores típicos: ciudad $40$--$80$ ppb, campo $30$--$70$ ppb.
+            \item Valores peligrosos: $>100$ ppb.
+        \end{itemize}
+        
+        \item NO$_2$ (dióxido de nitrógeno): Gas generado principalmente por la combustión en vehículos y plantas industriales. Contribuye a la formación de smog y lluvia ácida, además de afectar el sistema respiratorio.
+        \begin{itemize}
+            \item Valores típicos: ciudad $20$--$60$ ppb, campo $5$--$20$ ppb.
+            \item Valores peligrosos: $>100$ ppb.
+        \end{itemize}
+        
+        \item SO$_2$ (dióxido de azufre): Emitido por la quema de combustibles fósiles con contenido de azufre, como carbón y petróleo. Puede causar irritación respiratoria y contribuir a la lluvia ácida.
+        \begin{itemize}
+            \item Valores típicos: ciudad $5$--$20$ ppb, campo $1$--$5$ ppb.
+            \item Valores peligrosos: $>75$ ppb.
+        \end{itemize}
+        
+        \item CO (monóxido de carbono): Gas incoloro e inodoro producido por combustión incompleta. Disminuye la capacidad de la sangre para transportar oxígeno, siendo altamente peligroso en concentraciones elevadas.
+        \begin{itemize}
+            \item Valores típicos: ciudad $0.5$--$5$ ppm, campo $0.1$--$1$ ppm.
+            \item Valores peligrosos: $>9$ ppm (exposición prolongada).
+        \end{itemize}    
+    \end{itemize}
+
+\subsection{Análisis del impacto en salud y medio ambiente.}
+    La contaminación del aire representa el noveno factor de riesgo de muerte y discapacidad en México, causando aproximadamente 4.2 millones de muertes prematuras 
+    anuales en el mundo. En 2015, reducir las concentraciones de PM2.5 al límite recomendado por la OMS habría evitado hasta 14,666 muertes y más de 150,000 años de 
+    vida ajustados por discapacidad en el país. Algunas de las afectaciones en salud incluyen enfermedades respiratorias y cardiovasculares, disfunciones del sistema 
+    nervioso central y reproductivo o cáncer, entre otros.
+    \begin{table}[h]
+        \centering
+        \caption{Valores límite en Normas Oficiales Mexicanas y valores guía de la OMS}
+        \begin{tabular}{llccccc}
+            \hline
+             & \textbf{Métrica Exposición} & \textbf{Valor OMS} & \textbf{Valor NOM} & \textbf{Año 1°} & \textbf{Año 3°} & \textbf{Año 5°} \\
+            \hline
+            PM$_{10}$ & Promedio 24-hr. & 45 & 75 & 70 & 60 & 50 \\
+                      & Anual            & 15 & 40 & 36 & 28 & 20 \\
+            \hline
+            PM$_{2.5}$ & Promedio 24-hr. & 15 & 45 & 41 & 33 & 25 \\
+                       & Anual            &  5 & 12 & 10 & 10 & 10 \\
+            \hline
+            O$_3$ & Máximo 1-hr.         & ---   & 0.095 & 0.090 & 0.090 & 0.090 \\
+                  & Promedio móvil 8-hr. & 0.051 & 0.070 & 0.065 & 0.060 & 0.051 \\
+            \hline
+            NO$_2$ & Máximo 1-hr.    & 0.106 & 0.21  & 0.106 & ---   & ---   \\
+                   & Promedio 24-hr. & 0.013 & ---   & ---   & ---   & ---   \\
+                   & Anual           & 0.005 & ---   & 0.021 & ---   & ---   \\
+            \hline
+            SO$_2$ & Máximo 1-hr. & ---   & 0.075 & --- & --- & --- \\
+                   & 24 h.         & 0.015 & 0.040 & --- & --- & --- \\
+            \hline
+        \end{tabular}
+        \small\textit{Fuente: INECC / INSP. Unidades: $\mu$g/m$^3$ para PM; ppm para O$_3$, NO$_2$ y SO$_2$.}
+    \end{table}
+    Los principales contaminantes, partículas PM10 y PM2.5, ozono ($\text{O}_3$), dióxido de nitrógeno ($\text{NO}_2$) y dióxido de azufre ($\text{SO}_2$); afectan 
+    el sistema respiratorio, cardiovascular y nervioso, con mayor impacto en niños, adultos mayores y mujeres embarazadas. Las partículas más pequeñas (< 2.5 micras) 
+    penetran hasta los alvéolos pulmonares e incluso el torrente sanguíneo. En 2019, ninguna de las 25 ciudades mexicanas evaluadas cumplió con los límites normados 
+    de PM2.5, y Guadalajara y Monterrey registraron las concentraciones más elevadas de PM10 y $\text{O}_3$.
+
+
+\subsection{Sesión de interacción con estudiantes de Ingeniería Química para discutir:}
+    \paragraph{Smog Fotoquímico}
+    El smog fotoquímico se forma a partir de una serie de reacciones químicas en la atmósfera, principalmente impulsadas por la radiación solar. Uno de los procesos clave es la fotólisis del dióxido de nitrógeno:
+    
+    \begin{align*}
+    \text{NO}_2 + \text{luz solar} &\rightarrow \text{NO} + \text{O} \\
+    \text{O} + \text{O}_2 &\rightarrow \text{O}_3
+    \end{align*}
+    
+    En este proceso, el NO$_2$ se descompone por efecto de la radiación ultravioleta, liberando un átomo de oxígeno altamente reactivo que posteriormente forma ozono (O$_3$), un contaminante secundario.
+    
+    Por otro lado, el monóxido de carbono (CO) participa indirectamente en la formación de ozono mediante reacciones con radicales libres:
+    
+    \begin{align*}
+    \text{CO} + \cdot\text{OH} &\rightarrow \text{CO}_2 + \cdot\text{H} \\
+    \cdot\text{H} + \text{O}_2 &\rightarrow \cdot\text{HO}_2 \\
+    \cdot\text{HO}_2 + \text{NO} &\rightarrow \text{NO}_2 + \cdot\text{OH}
+    \end{align*}
+    
+    Este conjunto de reacciones genera un ciclo químico en el que el NO$_2$ se regenera, permitiendo la producción continua de ozono en la atmósfera.
+    
+    \paragraph{Formación de lluvia ácida a partir de SO$_2$}
+    
+    El SO$_2$ se disuelve en agua atmosférica formando H$_2$SO$_3$, que posteriormente se oxida a H$_2$SO$_4$. Este proceso ocurre principalmente en condiciones de alta humedad y presencia de oxidantes.
+
+\section*{Referencias}
+
+\begin{itemize}
+
+\item INECC, S. Informe nacional de calidad del aire 2015. 2016. México.
+
+\item Institute for Health Metrics and Evaluation (IHME). Mexico profile. Seattle, WA: IHME, University of Washington. 2018. Available from http://www.healthdata.org/Mexico (Accessed august 2021). 
+
+\item Manisalidis I, Stavropoulou E, Stavropoulos A, Bezirtzoglou E. Environmental and health impacts of air pollution: a review. Frontiers in public health. 2020;8(14). 
+\\ https://doi.org/10.3389/fpubh.2020.00014
+
+\item ONU-Habitat México. Índice de prosperidad urbana en la República Mexicana. Reporte Nacional de Tendencias de la Prosperidad Urbana en México. México: ONU-Habitat, 2016.
+
+\item Trejo-González AG, Riojas-Rodriguez H, Texcalac-Sangrador JL, Guerrero-López CM, Cervantes-Martínez K, Hurtado-Díaz M, Zuñiga-Bello PE. Quantifying health impacts and economic costs of PM 2.5 exposure in Mexican cities of the National Urban System. International journal of public health. 2019;64(4):561-72. https://doi.org/10.1007/s00038-019-01216-1
+
+\item Partículas suspendidas PM10 Y PM2.5 dañan salud y medio ... (n.d.). \\
+https://www.gob.mx/semarnat/articulos/particulas-suspendidas-pm10-y-pm2-5-danan-salud-y-medio-ambiente
+\end{itemize}
+
+\end{document}
