@@ -1,7 +1,8 @@
 \documentclass{article}
+\usepackage{graphicx} 
+\usepackage[a4paper, total={6in, 8in}]{geometry}
 
 \title{Fase 2. Comprensión de los datos}
-
 \author{
     Diana Laura Hernández Almeida \\
     Gonzalo Makenly Higuera Inzunza \\
@@ -9,13 +10,52 @@
     Juan Pablo De La Peña Gonzalez \\
     Sarah Camila Guzmán Fierro
 }
-
 \date{\today}
 
 \begin{document}
 
 \maketitle
 
-Fase 2
+\section*{Identificación de las variables de estudio y su relevancia}
+
+Los datos incluyen 14 variables y 28,654 observaciones. El archivo de nomenclatura contiene la sintaxis y el significado de alguno 
+de los terminos usados. Esto de manera resumida, por lo que es necesario un diccionario que relacione cada variable con su 
+significado explícito. 
+
+\subsection*{Diccionario de datos}
+
+\begin{itemize}
+  \item \texttt{sensor\_periodo}: [Sensor: A, B, C, D, E]\_[Periodo: P1, P2, P3]
+  \item \texttt{datetime}: año-mes-día hora:minutos:segundos
+  \item \texttt{CO2\_ppm}: Dióxido de carbono (CO$_2$), partes por millón
+  \item \texttt{TVOC\_ppb}: Compuestos Orgánicos Volátiles Totales (TVOC), partes por mil millones
+  \item \texttt{AQI}: Índice de Calidad del Aire (1--5), sin unidades
+  \item \texttt{CO\_ppm}: Monóxido de carbono (CO), partes por millón
+  \item \texttt{SO2\_ppm}: Dióxido de azufre (SO$_2$), partes por millón
+  \item \texttt{O3\_ppm}: Ozono (O$_3$), partes por millón
+  \item \texttt{NO2\_ppm}: Dióxido de nitrógeno (NO$_2$), partes por millón
+  \item \texttt{PM2\_5\_ugm3}: Partículas finas en suspensión con diámetro $< 2.5\,\mu m$ (PM2.5), $\mu g/m^3$
+  \item \texttt{PM10\_ugm3}: Material particulado en suspensión con diámetro $\leq 10\,\mu m$ (PM10), $\mu g/m^3$
+  \item \texttt{temp\_C}: Temperatura en grados Celsius ($^\circ$C)
+  \item \texttt{hum\_pct}: Porcentaje de humedad relativa del aire (\%)
+  \item \texttt{Bat\_pct}: Porcentaje de nivel de batería del sensor (\%)
+\end{itemize}
+
+Para el problema, la más relevante es el índice de Calidad del Aire (AQI), si asumimos esta como variable de respuesta. 
+En principio los predictores más relevantes son los diferentes compuestos y la temperatura; a menos de que entre algunos 
+de ellos exista una correlación, entonces se mantendrían aquellos compuestos escenciales no correlacionados. Para la fecha 
+y el tiempo se contemplaría su uso dependiendo del tipo de modelo que se planteé. Con respecto al sensor y su periodo, se 
+extraería el identificador del sensor de la variable, para basar el anális en uno de estos; sería necesario verificar si 
+el periodo es relevante para el modelo. Un aspecto a destacar son las variables de porcentaje de humedad relativa del aire 
+y porcentaje de nivel de batería del sensor, puesto que estas puedieran no parecer relevantes, en especial el nivel de batería; 
+sin embargo si se identifica que el nivel de batería del sensor influye en la exactitud de las muestras, esto quiere decir que 
+el error depende del timepo, entonces se podría velar por un modelo de Regresión con errores autorregresivos.
+
+\subsubsection*{Consideren filtrar los datos por alguna ubicación específica y basen su análisis en esa ubicación}
+
+Tras revisar que los datos no contienen información faltante, no es posible decidirlo de esa forma. Es por eso que, debido 
+al mayor número de observaciones con las que cuenta el Sensor D, esta será la ubicación a analizar. Aún así queda puerta 
+abierta a decantarnos por otro sensor, si se trata de datos díficiles de tratar, sin embargo, antes será necesario vefiricarlo 
+con el Análisis Exploratorio Inicial. Los datos del filtrados incluyen 14 variables y 13,758 observaciones.
 
 \end{document}

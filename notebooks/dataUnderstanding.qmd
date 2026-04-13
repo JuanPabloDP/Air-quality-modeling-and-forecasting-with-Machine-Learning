@@ -62,14 +62,14 @@ dict.to_excel("../data/Diccionario_Maestro.xlsx")
 1. sensor_periodo:	[Sensor: A , B, C, D, E]_[Periodo: P1, P2, P3]
 2. datetime:	año-mes-día hora:minutos:segundos
 3. CO2_ppm:	Dióxido de carbono (CO2), partes por millon
-4. TVOC_ppb:	Compuestos Orgánicos Volátiles Totales (TVOC),...
-5. AQI:	Índice de Calidad del Aire (1-5), no tiene uni...
+4. TVOC_ppb:	Compuestos Orgánicos Volátiles Totales (TVOC), partes por mil millones
+5. AQI:	Índice de Calidad del Aire (1-5), no tiene unidades
 6. CO_ppm:	Monóxido de carbono (CO), partes por millon
 7. SO2_ppm:	Dióxido de azufre (SO2), partes por millon
 8. O3_ppm:	Ozono (O3), partes por millon
 9. NO2_ppm:	Dióxido de nitrógeno (NO2), partes por millon
-10. PM2_5_ugm3:	Partículas finas en suspensión con un diámetro...
-11. PM10_ugm3:	Material particulado en suspensión con un diám...
+10. PM2_5_ugm3:	Partículas finas en suspensión con un diámetro inferior a 2.5 micrómetros (Particulas PM2.5), micro gramos por metro cúbico
+11. PM10_ugm3:	Material particulado en suspensión con un diámetro de 10 micrómetros o menos (Particulas PM10), micro gramos por metro cúbico
 12. temp_C:	Temperatura en grados Celsius
 13. hum_pct:	Porcentaje de humedad relativa del aire (%)
 14. Bat_pct:	Porcentaje de nivel de batería del sensor (%)
