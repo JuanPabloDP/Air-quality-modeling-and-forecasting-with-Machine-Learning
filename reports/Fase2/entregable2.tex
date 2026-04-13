@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage{graphicx} 
-\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[a4paper, margin=1.2cm]{geometry}
 
 \title{Fase 2. Comprensión de los datos}
 \author{
@@ -23,23 +23,8 @@ de los terminos usados. Esto de manera resumida, por lo que es necesario un dicc
 significado explícito. 
 
 \subsection*{Diccionario de datos}
-
-\begin{itemize}
-  \item \texttt{sensor\_periodo}: [Sensor: A, B, C, D, E]\_[Periodo: P1, P2, P3]
-  \item \texttt{datetime}: año-mes-día hora:minutos:segundos
-  \item \texttt{CO2\_ppm}: Dióxido de carbono (CO$_2$), partes por millón
-  \item \texttt{TVOC\_ppb}: Compuestos Orgánicos Volátiles Totales (TVOC), partes por mil millones
-  \item \texttt{AQI}: Índice de Calidad del Aire (1--5), sin unidades
-  \item \texttt{CO\_ppm}: Monóxido de carbono (CO), partes por millón
-  \item \texttt{SO2\_ppm}: Dióxido de azufre (SO$_2$), partes por millón
-  \item \texttt{O3\_ppm}: Ozono (O$_3$), partes por millón
-  \item \texttt{NO2\_ppm}: Dióxido de nitrógeno (NO$_2$), partes por millón
-  \item \texttt{PM2\_5\_ugm3}: Partículas finas en suspensión con diámetro $< 2.5\,\mu m$ (PM2.5), $\mu g/m^3$
-  \item \texttt{PM10\_ugm3}: Material particulado en suspensión con diámetro $\leq 10\,\mu m$ (PM10), $\mu g/m^3$
-  \item \texttt{temp\_C}: Temperatura en grados Celsius ($^\circ$C)
-  \item \texttt{hum\_pct}: Porcentaje de humedad relativa del aire (\%)
-  \item \texttt{Bat\_pct}: Porcentaje de nivel de batería del sensor (\%)
-\end{itemize}
+ 
+Las variables se clasifican en cuatro grupos: identificación (\texttt{sensor\_periodo}, \texttt{datetime}); gases contaminantes (\texttt{CO2\_ppm}, \texttt{TVOC\_ppb}, \texttt{CO\_ppm}, \texttt{SO2\_ppm}, \texttt{O3\_ppm}, \texttt{NO2\_ppm}); material particulado (\texttt{PM2\_5\_ugm3} en $\mu g/m^3$ para partículas $<2.5\,\mu m$, \texttt{PM10\_ugm3} para $\leq 10\,\mu m$); y variables ambientales y operativas (\texttt{temp\_C} en $^\circ$C, \texttt{hum\_pct} y \texttt{Bat\_pct} en \%). La variable de respuesta es \texttt{AQI}, índice de calidad del aire en escala 1--5.
 
 Para el problema, la más relevante es el índice de Calidad del Aire (AQI), si asumimos esta como variable de respuesta. 
 En principio los predictores más relevantes son los diferentes compuestos y la temperatura; a menos de que entre algunos 
@@ -57,5 +42,52 @@ Tras revisar que los datos no contienen información faltante, no es posible dec
 al mayor número de observaciones con las que cuenta el Sensor D, esta será la ubicación a analizar. Aún así queda puerta 
 abierta a decantarnos por otro sensor, si se trata de datos díficiles de tratar, sin embargo, antes será necesario vefiricarlo 
 con el Análisis Exploratorio Inicial. Los datos del filtrados incluyen 14 variables y 13,758 observaciones.
+
+
+
+
+
+
+
+\section*{Análisis exploratorio inicial}
+
+\subsection*{Distribución y comportamiento temporal}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.30\textwidth]{histogramas.png}
+\caption{Distribución de las variables numéricas}
+\end{figure}
+
+La mayoría de variables presentan distribuciones sesgadas a la derecha, especialmente los gases contaminantes (CO$_2$, TVOC, CO) y las partículas (PM2.5, PM10), indicando episodios de alta concentración. Temperatura y humedad muestran distribuciones más estables, aproximadamente normales.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.30\textwidth]{co2_tiempo.png}
+\caption{Serie temporal de CO$_2$}
+\end{figure}
+
+El CO$_2$ presenta picos abruptos en ciertos intervalos, posiblemente asociados a eventos atípicos o errores de medición, tras los cuales la señal se estabiliza.
+
+\subsection*{Patrones por hora del día}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.30\textwidth]{promedio_hora.png}
+\caption{Promedio de variables por hora}
+\end{figure}
+
+CO$_2$ y TVOC incrementan en horas de mayor actividad humana. Temperatura y humedad siguen ciclos diarios esperados. Las partículas presentan menor variabilidad relativa pero tendencias similares.
+
+\subsection*{Hallazgos principales}
+
+\begin{itemize}
+    \item Valores atípicos en múltiples variables y posible multicolinealidad entre contaminantes.
+    \item Evidencia de patrones temporales diarios y correlación negativa entre temperatura y humedad.
+    \item Alta correlación entre CO$_2$ y TVOC ($\approx 0.96$) y entre PM2.5 y PM10 ($\approx 0.72$), lo que sugiere aplicar selección de variables o reducción de dimensionalidad.
+\end{itemize}
+
+
+
 
 \end{document}

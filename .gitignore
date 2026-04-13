@@ -13,3 +13,6 @@
 .*.lb
 *.fdb_latexmk
 *.synctex.gz
+
+.vscode/
+*.code-workspace
