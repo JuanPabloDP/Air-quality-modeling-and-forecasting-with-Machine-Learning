@@ -21,7 +21,7 @@ data=pd.read_excel("../data/Datos_maestro_sensores.xlsx")
 data.head()
 ```
 
-El datos incluyen 14 variables y 28,654 observaciones. 
+Los datos incluyen 14 variables y 28,654 observaciones. 
 
 # Descarga el archivo Nomenclatura_Maestro.xlsx para conocer el diccionario de datos.
 
@@ -79,5 +79,17 @@ Para el problema, la más relevante es el índice de Calidad del Aire (AQI), si 
 # Consideren filtrar los datos por alguna ubicación específica y basen su análisis en esa ubicación.
 
 ```{python}
-
+data[["sensor", "periodo"]] = data["sensor_periodo"].str.split("_", expand=True)
+cols=["sensor"]+["periodo"]+[c for c in data.columns if c!="sensor" if c !="periodo" if c!="sensor_periodo"]
+data = data[cols]
+data.head()
 ```
+
+Tras revisar que los datos no contienen información faltante, no es posible decidirlo de esa forma. Es por eso que, debido al mayor número de observaciones con las que cuenta el Sensor D, esta será la ubicación a analizar. Aún así queda puerta abierta a decantarnos por otro sensor, si se trata de datos díficiles de tratar, sin embargo, antes será necesario vefiricarlo con el Análisis Exploratorio Inicial. 
+
+```{python}
+data_sensorD=data[data["sensor"]=="D"].drop(columns="sensor").copy()
+data_sensorD.to_excel("../data/Datos_sensorD.xlsx")
+```
+
+Los datos del filtrados incluyen 14 variables y 13,758 observaciones.
