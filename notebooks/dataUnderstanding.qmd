@@ -79,5 +79,44 @@ Para el problema, la más relevante es el índice de Calidad del Aire (AQI), si 
 # Consideren filtrar los datos por alguna ubicación específica y basen su análisis en esa ubicación.
 
 ```{python}
-
+sensor_id = "E_P2"
+df = data[data["sensor_periodo"] == sensor_id].copy()
+df = df.sort_values("datetime").reset_index(drop=True)
+print(f"Observaciones del sensor {sensor_id}: {len(df)}")
+print(f"Periodo: {df['datetime'].min()} a {df['datetime'].max()}")
+df.head()
 ```
+
+En este caso se ha seleccionado el sensor E en el periodo P2, ya que es el que tiene más observaciones. Este sensor se encuentra activo desde el 4 al 25 de noviembre de 2025, con un total de 8343 observaciones.
+
+
+## EDA
+
+```{python}
+df.describe().T.round(3)
+```
+
+De los 8,343 registros , no hay valores nulos para el sensor E_P2.
+
+CO2_ppm: media de 654 ppm con máximo de 1,636 ppm, los bajos podrian ser si se metieron los sensores a un lugar cerrado.
+TVOC_ppb: alta dispersión y un máximo de 4,178
+PM2.5 y PM10: medias bajas dentro de rangos normales, pero máximos extremos.
+temp_C: la batería no varió dramáticamente durante el periodo
+AQI: media de 2.14 sobre una escala de 1–5, con valores concentrados en 2 y 3
+
+## Distribución del AQI
+
+```{python}
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(6, 4))
+df["AQI"].value_counts().sort_index().plot(kind="bar", ax=ax, color="steelblue", edgecolor="black")
+ax.set_xlabel("AQI")
+ax.set_ylabel("Frecuencia")
+ax.set_title("Distribución del AQI – Sensor E_P2")
+plt.tight_layout()
+plt.savefig("../figs/aqi_distribucion.png", dpi=150)
+plt.show()
+```
+
+ la categoría 2 domina, seguida de la categoría 3 y la 1. Las categorías 4 y 5 son muy poco frecuentes.
