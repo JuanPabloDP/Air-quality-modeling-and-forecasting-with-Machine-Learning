@@ -87,7 +87,19 @@ CO$_2$ y TVOC incrementan en horas de mayor actividad humana. Temperatura y hume
     \item Alta correlación entre CO$_2$ y TVOC ($\approx 0.96$) y entre PM2.5 y PM10 ($\approx 0.72$), lo que sugiere aplicar selección de variables o reducción de dimensionalidad.
 \end{itemize}
 
+\section*{Discusión con estudiantes de Ingeniería Química}
 
+\subsection*{Coherencia física y química de los datos}
+
+Los valores basales de la mayoría de los contaminantes son coherentes con un ambiente urbano. Sin embargo, los picos de CO$_2$ superiores a 10,000 ppm en el periodo P1 superan lo esperado incluso en espacios cerrados, por lo que probablemente reflejan interferencias del sensor o proximidad a una fuente de combustión directa. La temperatura máxima de 61.6°C tampoco es representativa del ambiente atmosférico y sugiere exposición solar directa al sensor. La correlación alta entre CO$_2$, TVOC y CO es químicamente consistente, ya que los tres son productos típicos de combustión incompleta.
+
+\subsection*{Selección de variables, transformaciones y feature engineering}
+
+Se propone conservar \texttt{CO\_ppm}, \texttt{CO2\_ppm}, \texttt{NO2\_ppm}, \texttt{O3\_ppm}, \texttt{PM2\_5\_ugm3} y \texttt{temp\_C} como predictores principales, descartando TVOC por su alta redundancia con CO$_2$. Para reducir el efecto de valores extremos se sugiere aplicar transformación logarítmica a CO$_2$, TVOC, CO y las partículas. Como feature engineering, extraer la hora del día y el día de la semana desde la fecha podría ayudar a capturar patrones de tráfico y actividad humana.
+
+\subsection*{Valores esperados y atípicos}
+
+Los valores atípicos más notables son CO$_2$ mayor a 5,000 ppm, TVOC mayor a 3,000 ppb, PM2.5 mayor a 200 $\mu g/m^3$ y registros con batería en 0\%. Antes de eliminarlos se recomienda analizarlos en contexto temporal, ya que algunos podrían corresponder a eventos reales de contaminación. Los registros con batería en cero merecen atención especial pues podrían ser lecturas tomadas durante fallas del sensor.
 
 
 \end{document}
