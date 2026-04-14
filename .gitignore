@@ -14,5 +14,6 @@
 *.fdb_latexmk
 *.synctex.gz
 
+# Visual Studio Code auxiliary files:
 .vscode/
 *.code-workspace
