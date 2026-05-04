@@ -21,15 +21,44 @@ El objetivo es construir un conjunto de datos limpio, consistente y adecuado par
 transform, load) durante el reporte, así mismo su justificación y validación en cuanto a conceptos químicos. 
 
 \section{Proceso ETL}
+El proceso ETL se compone de tres etapas: Extracción, Transformación y Carga. Su objetivo es limpiar la información, manejar datos
+atípicos, imputar valores faltantes y estandarizar las variables para que sean adecuadas para el modelado.
+Antes de comenzar con el proceso ETL, se definen reglas basadas en el conocimiento previo. Se define el umbral de correlación en 0.9, 
+se definen las variables \texttt{TVOC\_ppb} y \texttt{PM10\_ugm3} para ser eliminadas por su alta correlación, se definen umbrales para cada variable 
+basados en la literatura y finalmente se define el umbral de batería baja.
 
 \subsection{Extracción}
+El método de extracción carga los archivos \texttt{.xlsx}. Posteriormente separa la columna \texttt{sensor\_periodo} en dos columnas 
+independientes: \texttt{sensor} y \texttt{periodo}, y crea un DataFrame por cada sensor solicitado. Si el periodo es el mismo para todos los
+registros del sensor, se elimina esa columna. Finalmente ordena los datos cronológicamente usando \texttt{datetime}.
 
 \subsection{Transformación}
+La transformación se compone de tres etapas: limpieza, imputación y estandarización/normalización. Esta sigue un patrón de $\texttt{Fit}$ y 
+$\texttt{Transform}$, 
+es decir, primero aprende los parámetros necesarios y posteriormente los aplica a los datos.
 
 \subsubsection{Limpieza}
+Este paso usa los métodos \texttt{\_\_clean\_fit} y \texttt{\_\_clean\_transform} para eliminar datos y decidir qué es un
+error de medición.
+Primero elimina las columnas altamente correlacionadas. Posteriormente se detectan valores atípicos siguiendo la
+siguiente lógica:
+Un dato se marca como valor atípico cuando hay discordancia entre el \texttt{AQI} y las concentraciones de contaminantes. Si el \texttt{AQI} es alto, pero no hay
+contaminante que lo justifique, se marca como sospechoso. Usando el criterio de la batería se eliminan los datos sospechosos:
+Si hay un dato sospechoso y la batería es baja, se clasifica como error de medición y se elimina el dato. Si hay un dato 
+sospechoso y la batería es alta, se mantiene el dato. 
 \subsubsection{Imputación}
+Este paso utiliza los métodos $\texttt{\_\_impute\_fit}$ y $\texttt{\_\_impute\_transform}$.
+Después de la limpieza, se verifica que no queden datos faltantes generados por la misma. En caso de que existan, se imputa 
+el valor usando interpolación lineal. Este método se elige porque es sencillo, rápido y adecuado para datos temporales. 
+
 \subsubsection{Estandarización y Normalización}
-
+Este paso utiliza los métodos $\texttt{\_\_norm\_std\_fit}$ y $\texttt{\_\_norm\_std\_transform}$.
+Para estandarizar y normalizar los datos, estos se separan en dos grupos: contaminantes y variables ambientales/batería.
+Para los contaminantes ambientales se utiliza la estandarización \texttt{Z-Score}, la cual resta la media y divide por la
+desviación estándar, y se normaliza para que esté entre 0 y 1.
+Para la temperatura, humedad y batería se utiliza la normalización Min-Max, la cual resta el valor mínimo y divide por el 
+rango. De igual forma, se normaliza para que esté entre 0 y 1.
 \subsection{Load}
-
+La última etapa del proceso ETL es la carga, la cual crea una carpeta llamada $\texttt{/Load/}$ si no existe, y exporta cada
+DataFrame de sensor procesado a un único archivo $\texttt{.csv}$.
 \end{document}
