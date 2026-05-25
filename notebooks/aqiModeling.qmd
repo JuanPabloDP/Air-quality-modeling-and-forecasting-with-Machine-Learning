@@ -1,0 +1,74 @@
+---
+title: "Modelación"
+format:
+   html:
+     toc: true
+     html-math-method: katex
+     embed-resources: true
+     self-contained-math: true
+     df-print: kable
+editor: source
+---
+
+# Modelos de deep learning
+
+```{python}
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.svm import SVR
+from xgboost import XGBRegressor
+
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+```
+
+```{python}
+data=pd.read_csv("../data/Load/data_sensor_D.csv")
+data.head()
+```
+
+```{python}
+numeric_data=data.drop(columns=["periodo", "datetime"]).copy()
+X = numeric_data.drop(columns=["AQI"]).to_numpy()
+y = numeric_data["AQI"].to_numpy()
+```
+
+```{python}
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+```
+
+## Suppor vector regression
+
+```{python}
+svr_rbf = SVR(kernel='rbf', C=100, gamma=0.5, epsilon=0.1)
+svr_rbf.fit(X_train, y_train)
+
+y_pred_rbf = svr_rbf.predict(X_test)
+```
+
+```{python}
+rmse_rbf = np.sqrt(mean_squared_error(y_test, y_pred_rbf))
+mae_rbf = mean_absolute_error(y_test, y_pred_rbf)
+
+print("RBF SVR RMSE:", rmse_rbf)
+print("RBF SVR MAE:", mae_rbf)
+```
+
+## Gradient boosting decision trees (GBDT): XGBoost
+
+```{python}
+xgb_regressor = XGBRegressor(n_estimators=100, max_depth=5, learning_rate=0.1, objective='reg:squarederror')
+xgb_regressor.fit(X_train, y_train)
+
+y_pred_xgb = xgb_regressor.predict(X_test)
+```
+
+```{python}
+rmse_rbf = np.sqrt(mean_squared_error(y_test, y_pred_xgb))
+mae_rbf = mean_absolute_error(y_test, y_pred_xgb)
+
+print("RBF SVR RMSE:", rmse_rbf)
+print("RBF SVR MAE:", mae_rbf)
+```
