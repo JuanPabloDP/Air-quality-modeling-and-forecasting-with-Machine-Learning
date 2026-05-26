@@ -1,8 +1,8 @@
 \documentclass{article}
 \usepackage{graphicx} 
 \usepackage[a4paper, margin=1.2cm]{geometry}
-
-\title{Fase 3. Preparación de los datos}
+\usepackage{float}
+\title{Fase 4. Modelación}
 \author{
     Diana Laura Hernández Almeida \\
     Gonzalo Makenly Higuera Inzunza \\
@@ -11,106 +11,124 @@
     Sarah Camila Guzmán Fierro
 }
 \date{\today}
-
 \begin{document}
-
 \maketitle
-
 \section{Introducción}
-El bjetivo de este entregable es probar y comparar distintos modelos, incluyendo los siguientes
+El objetivo de este entregable es probar y comparar distintos modelos, incluyendo los siguientes
 tres tipos: modelos de regresión, modelos de machine learning y modelos de deep learning. 
-
 \section{Modelación}
-
 \subsection{Modelos de regresión}
-\dots
+En este apartado se utilizaron Regresión Lineal y Ridge como modelos base. Para Ridge, el mejor valor de $\alpha$ fue seleccionado mediante \texttt{RidgeCV} con validación cruzada de 5 pliegues sobre un rango logarítmico, obteniendo $\alpha = 1668.1005$. La evaluación se realizó con validación cruzada de 5 pliegues (\texttt{KFold}, \texttt{random\_state=42}).
 
 \begin{table}[ht]
-    \caption{Modelos de regresión} 
-    \centering 
-    \begin{tabular}{c c c} 
-        \hline\hline 
-        Model & Metric 1 & Metric 2 \\ [0.5ex] 
-        \hline 
-        Model 1 &  &  \\ 
-        Model 2 &  &  \\ [1ex] 
-        \hline 
-    \end{tabular}
+\caption{Modelos de regresión}
+\centering
+\begin{tabular}{c c c c c c c}
+\hline\hline
+    Model & R$^2$ & $\sigma_{R^2}$ & RMSE & $\sigma_{\text{RMSE}}$ & MAE & $\sigma_{\text{MAE}}$ \\ [0.5ex]
+\hline
+    Linear Regression & 0.4586 & 0.0562 & 0.6798 & 0.0365 & 0.5036 & 0.0045 \\
+    Ridge ($\alpha=1668.10$) & 0.4466 & 0.0321 & 0.6878 & 0.0203 & 0.5226 & 0.0026 \\ [1ex]
+\hline
+\end{tabular}
 \end{table}
+
+Ambos modelos obtuvieron un $R^2$ promedio de aproximadamente $0.45$, explicando cerca del $45\%$ de la varianza del AQI. Ridge presentó menor varianza entre pliegues ($\sigma_{R^2} = 0.032$ frente a $0.056$), lo que lo hace más estable, aunque ninguno supera al otro de forma significativa. La verificación de supuestos reveló fallas en normalidad de residuos y homocedasticidad ($p = 0.000$ en ambos casos), y un estadístico Durbin-Watson de $0.44$ y $0.37$ respectivamente, indicando fuerte autocorrelación positiva. Estos resultados justifican la exploración de modelos con mayor capacidad expresiva.
 
 \subsection{Modelos de machine learning}
 En este apartado, se utilizaron los siguientes modelos con sus correspondientes resultados.
-Se optó por utilizar "Support vector regression" y "XGBoost" como regresor. 
+Se optó por utilizar Support Vector Regression y XGBoost como regresor. 
 \begin{table}[ht]
-    \caption{Modelos de machine learning} 
-    \centering 
-    \begin{tabular}{c c c} 
-        \hline\hline 
+\caption{Modelos de machine learning} 
+\centering 
+\begin{tabular}{c c c} 
+\hline\hline 
         Model & RMSE & MAE \\ [0.5ex] 
-        \hline 
+\hline 
         Support vector regression & 0.2679 & 0.1809 \\ 
         XGBoost regression & 0.1894 & 0.0710 \\ [1ex] 
-        \hline 
-    \end{tabular}
+\hline 
+\end{tabular}
 \end{table}
 
 \subsubsection{Modelos de deep learning}
-
-Para modelos de Deep Learning se seleccionaron Vanilla Recurrent Neural Network y Gated Recurrent Units (GRU). Dentro de los hyperparámetros iniciales, para ambos métodos se seleccionaron 64 capas ocultas, un dropout de probabilidad 0.2, 100 épocas empalme de dos capas y una velocidad de aprendizaje de 1e-3.
+Para modelos de Deep Learning se seleccionaron Vanilla Recurrent Neural Network y Gated Recurrent Units (GRU). Dentro de los hiperparámetros iniciales, para ambos métodos se seleccionaron 64 capas ocultas, un dropout de probabilidad 0.2, 100 épocas, apilamiento de dos capas y una velocidad de aprendizaje de $1\times10^{-3}$.
 Tras computar ambos algoritmos, se obtuvieron los resultados de la tabla a continuación.
-
 \begin{table}[ht]
-    \caption{Modelos de deep learning} 
-    \centering 
-    \begin{tabular}{c c c} 
-        \hline\hline 
+\caption{Modelos de deep learning} 
+\centering 
+\begin{tabular}{c c c} 
+\hline\hline 
         Model & RMSE & MAE \\ [0.5ex] 
-        \hline 
-        Vanilla RNN & 0.241802  & 0.176560 \\ 
-        GRU & 0.194167 &  0.087533\\ [1ex] 
-        \hline 
-    \end{tabular}
+\hline 
+        Vanilla RNN & 0.2459 & 0.1826 \\ 
+        GRU         & 0.2792 & 0.2255 \\ [1ex] 
+\hline 
+\end{tabular}
 \end{table}
 
-De ambos modelos, es fácil ver que el GRU fue el sobresaliente.
+De ambos modelos, es fácil ver que el Vanilla RNN fue el sobresaliente en esta configuración inicial.
 
-\subsubsection{Selección de Mejores Modelos}
 \subsubsection{Cross Validation con GRU para Selección de Hiperparámetros}
-Para realizar la validación cruzada, se generalizan los scripts iniciales. Los hiperparámetros a optimizar serían las capas ocultas, el apilamiento de capas, la probabilidad de dropout, el paso de aprendizaje, y el tamaño de los grupos.
-
+Para realizar la validación cruzada, se generalizan los scripts iniciales. Los hiperparámetros a optimizar serían las capas ocultas, el apilamiento de capas, la probabilidad de dropout, el paso de aprendizaje y el tamaño de los grupos.
 \begin{table}[h]
-    \centering
-    \caption{GRU Hyperparameter Search Space}
-    \label{tab:gru_hyperparam}
-    \begin{tabular}{ll}
-    \hline
-    \textbf{Hyperparameter} & \textbf{Values} \\
-    \hline
+\centering
+\caption{GRU Hyperparameter Search Space}
+\label{tab:gru_hyperparam}
+\begin{tabular}{ll}
+\hline
+\textbf{Hyperparameter} & \textbf{Values} \\
+\hline
     Hidden size   & 32, 64, 128 \\
     Num layers    & 1, 2 \\
     Dropout       & 0.0, 0.2, 0.3 \\
     Learning rate & $1\times10^{-3}$, $5\times10^{-4}$ \\
     Batch size    & 32, 64 \\
-    \hline
-    \end{tabular}
-    \end{table}
-De forma estándar se hacen cinco pliegues y 50 épocas (reducir el tiempo de cómputo). Con un tiempoe stimado de 50 minutos para computar las 72 variantes, los mejores resultados se enlistan a continuación:
+\hline
+\end{tabular}
+\end{table}
 
+De forma estándar se hacen cinco pliegues y 50 épocas para reducir el tiempo de cómputo. Con un tiempo estimado de 50 minutos para computar las 72 variantes, los mejores resultados se enlistan a continuación:
 \begin{table}[h]
-    \centering
-    \caption{Top GRU Configurations by Cross-Validation RMSE}
-    \label{tab:gru_cv_results}
-    \begin{tabular}{cccccrr}
-    \hline
-    \textbf{Hidden size} & \textbf{Num layers} & \textbf{Dropout} & \textbf{LR} & \textbf{Batch size} & \textbf{Mean RMSE} & \textbf{Std RMSE} \\
-    \hline
+\centering
+\caption{Top GRU Configurations by Cross-Validation RMSE}
+\label{tab:gru_cv_results}
+\begin{tabular}{cccccrr}
+\hline
+\textbf{Hidden size} & \textbf{Num layers} & \textbf{Dropout} & \textbf{LR} & \textbf{Batch size} & \textbf{Mean RMSE} & \textbf{Std RMSE} \\
+\hline
     128 & 2 & 0.2 & $1\times10^{-3}$ & 32 & 0.1962 & 0.0108 \\
     128 & 2 & 0.0 & $1\times10^{-3}$ & 32 & 0.2008 & 0.0086 \\
     128 & 2 & 0.3 & $1\times10^{-3}$ & 32 & 0.2171 & 0.0304 \\
-    \hline
-    \end{tabular}
-    \end{table}
+\hline
+\end{tabular}
+\end{table}
 
-\subsubsection{Modelo Final}
+\subsection{Modelo Final}
+Tras evaluar los tres enfoques de modelación, el modelo seleccionado como definitivo es \textbf{XGBoost} con hiperparámetros optimizados mediante \texttt{RandomizedSearchCV} con validación cruzada de 5 pliegues. Los mejores hiperparámetros encontrados fueron \texttt{n\_estimators=100}, \texttt{max\_depth=None} y \texttt{learning\_rate=0.1}.
+
+La selección de XGBoost sobre el GRU con validación cruzada se justifica por las siguientes razones:
+
+\begin{itemize}
+    \item \textbf{MAE inferior}: XGBoost obtuvo un MAE de $0.0690$ frente a $0.0713$ del GRU optimizado, lo que indica un menor error absoluto promedio en la predicción del AQI.
+    \item \textbf{Resultados comparables en RMSE}: La diferencia en RMSE entre ambos modelos es marginal ($0.1901$ vs $0.1827$), sin representar una ventaja práctica significativa para el GRU.
+    \item \textbf{Eficiencia computacional}: XGBoost requiere una fracción del tiempo de entrenamiento en comparación con el GRU, que demanda múltiples épocas y un proceso de validación cruzada de aproximadamente 50 minutos.
+    \item \textbf{Interpretabilidad}: XGBoost permite analizar la importancia de las variables (\textit{feature importance}), lo cual es valioso para comprender qué sensores contribuyen más a la predicción del AQI.
+\end{itemize}
+
+\begin{table}[H]
+\caption{Comparación final: GRU (CV-tuned) vs XGBoost (tuned)}
+\centering
+\begin{tabular}{c c c}
+\hline\hline
+    Model & RMSE & MAE \\ [0.5ex]
+\hline
+    GRU (CV-tuned)   & 0.1827 & 0.0713 \\
+    XGBoost (tuned)  & 0.1901 & 0.0690 \\ [1ex]
+\hline
+\end{tabular}
+\end{table}
+
+En conclusión, XGBoost representa el mejor balance entre rendimiento predictivo, costo computacional e interpretabilidad para el problema de predicción del AQI a partir de datos de sensores ambientales.
 
 \end{document}
