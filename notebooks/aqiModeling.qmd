@@ -17,6 +17,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import RandomizedSearchCV
 
 from sklearn.svm import SVR
 from xgboost import XGBRegressor
@@ -71,4 +72,29 @@ mae_rbf = mean_absolute_error(y_test, y_pred_xgb)
 
 print("RBF SVR RMSE:", rmse_rbf)
 print("RBF SVR MAE:", mae_rbf)
+```
+
+## Hyperparameters selection 
+
+```{python}
+xgb_regressor = XGBRegressor()
+
+param_dist = {'n_estimators': [100, 200, 300, 500], 'max_depth': [None, 10, 20, 30, 50], 'learning_rate': [0.1, 0.2, 0.5, 0.8]}
+
+random_search = RandomizedSearchCV(estimator=xgb_regressor, param_distributions=param_dist, n_iter=10, random_state=42, cv=5, scoring='neg_mean_squared_error')
+
+random_search.fit(X_train, y_train)
+
+print(f"Best Params: {random_search.best_params_}")
+best_model = random_search.best_estimator_
+```
+
+```{python}
+y_pred_xgb_best = best_model.predict(X_test)
+
+rmse_rbf_best = np.sqrt(mean_squared_error(y_test, y_pred_xgb_best))
+mae_rbf_best = mean_absolute_error(y_test, y_pred_xgb_best)
+
+print("RBF SVR RMSE:", rmse_rbf_best)
+print("RBF SVR MAE:", mae_rbf_best)
 ```
