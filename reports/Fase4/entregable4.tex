@@ -52,57 +52,78 @@ Se optó por utilizar Support Vector Regression y XGBoost como regresor.
 \end{table}
 
 \subsubsection{Modelos de deep learning}
-Para modelos de Deep Learning se seleccionaron Vanilla Recurrent Neural Network y Gated Recurrent Units (GRU). Dentro de los hiperparámetros iniciales, para ambos métodos se seleccionaron 64 capas ocultas, un dropout de probabilidad 0.2, 100 épocas, apilamiento de dos capas y una velocidad de aprendizaje de $1\times10^{-3}$.
+
+Para modelos de Deep Learning se seleccionaron Vanilla Recurrent Neural Network y Gated Recurrent Units (GRU). Dentro de los hyperparámetros iniciales, para ambos métodos se seleccionaron 64 capas ocultas, un dropout de probabilidad 0.2, 100 épocas empalme de dos capas y una velocidad de aprendizaje de 1e-3.
 Tras computar ambos algoritmos, se obtuvieron los resultados de la tabla a continuación.
+
 \begin{table}[ht]
-\caption{Modelos de deep learning} 
-\centering 
-\begin{tabular}{c c c} 
-\hline\hline 
+    \caption{Modelos de deep learning} 
+    \centering 
+    \begin{tabular}{c c c} 
+        \hline\hline 
         Model & RMSE & MAE \\ [0.5ex] 
-\hline 
-        Vanilla RNN & 0.2459 & 0.1826 \\ 
-        GRU         & 0.2792 & 0.2255 \\ [1ex] 
-\hline 
-\end{tabular}
+        \hline 
+        Vanilla RNN & 0.241802  & 0.176560 \\ 
+        GRU & 0.194167 &  0.087533\\ [1ex] 
+        \hline 
+    \end{tabular}
 \end{table}
 
-De ambos modelos, es fácil ver que el Vanilla RNN fue el sobresaliente en esta configuración inicial.
+De ambos modelos, es fácil ver que el GRU fue el sobresaliente.
 
+\subsubsection{Selección de Mejores Modelos}
 \subsubsection{Cross Validation con GRU para Selección de Hiperparámetros}
-Para realizar la validación cruzada, se generalizan los scripts iniciales. Los hiperparámetros a optimizar serían las capas ocultas, el apilamiento de capas, la probabilidad de dropout, el paso de aprendizaje y el tamaño de los grupos.
+Para realizar la validación cruzada, se generalizan los scripts iniciales. Los hiperparámetros a optimizar serían las capas ocultas, el apilamiento de capas, la probabilidad de dropout, el paso de aprendizaje, y el tamaño de los grupos.
+
 \begin{table}[h]
-\centering
-\caption{GRU Hyperparameter Search Space}
-\label{tab:gru_hyperparam}
-\begin{tabular}{ll}
-\hline
-\textbf{Hyperparameter} & \textbf{Values} \\
-\hline
+    \centering
+    \caption{GRU Hyperparameter Search Space}
+    \label{tab:gru_hyperparam}
+    \begin{tabular}{ll}
+    \hline
+    \textbf{Hyperparameter} & \textbf{Values} \\
+    \hline
     Hidden size   & 32, 64, 128 \\
     Num layers    & 1, 2 \\
     Dropout       & 0.0, 0.2, 0.3 \\
     Learning rate & $1\times10^{-3}$, $5\times10^{-4}$ \\
     Batch size    & 32, 64 \\
-\hline
-\end{tabular}
-\end{table}
+    \hline
+    \end{tabular}
+    \end{table}
+De forma estándar se hacen cinco pliegues y 50 épocas (reducir el tiempo de cómputo). Con un tiempoe stimado de 50 minutos para computar las 72 variantes, los mejores resultados se enlistan a continuación:
 
-De forma estándar se hacen cinco pliegues y 50 épocas para reducir el tiempo de cómputo. Con un tiempo estimado de 50 minutos para computar las 72 variantes, los mejores resultados se enlistan a continuación:
 \begin{table}[h]
-\centering
-\caption{Top GRU Configurations by Cross-Validation RMSE}
-\label{tab:gru_cv_results}
-\begin{tabular}{cccccrr}
-\hline
-\textbf{Hidden size} & \textbf{Num layers} & \textbf{Dropout} & \textbf{LR} & \textbf{Batch size} & \textbf{Mean RMSE} & \textbf{Std RMSE} \\
-\hline
+    \centering
+    \caption{Top GRU Configurations by Cross-Validation RMSE}
+    \label{tab:gru_cv_results}
+    \begin{tabular}{cccccrr}
+    \hline
+    \textbf{Hidden size} & \textbf{Num layers} & \textbf{Dropout} & \textbf{LR} & \textbf{Batch size} & \textbf{Mean RMSE} & \textbf{Std RMSE} \\
+    \hline
     128 & 2 & 0.2 & $1\times10^{-3}$ & 32 & 0.1962 & 0.0108 \\
     128 & 2 & 0.0 & $1\times10^{-3}$ & 32 & 0.2008 & 0.0086 \\
     128 & 2 & 0.3 & $1\times10^{-3}$ & 32 & 0.2171 & 0.0304 \\
-\hline
-\end{tabular}
-\end{table}
+    \hline
+    \end{tabular}
+    \end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection{Modelo Final}
 Tras evaluar los tres enfoques de modelación, el modelo seleccionado como definitivo es \textbf{XGBoost} con hiperparámetros optimizados mediante \texttt{RandomizedSearchCV} con validación cruzada de 5 pliegues. Los mejores hiperparámetros encontrados fueron \texttt{n\_estimators=100}, \texttt{max\_depth=None} y \texttt{learning\_rate=0.1}.
