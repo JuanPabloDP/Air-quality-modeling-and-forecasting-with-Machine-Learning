@@ -1,0 +1,135 @@
+---
+title: "Análisis de Predicción de AQI usando XGBoost"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    theme: cosmo
+    code-fold: true
+    self-contained: true
+lang: es
+---
+
+# Panorama General
+
+En contexto de una serie de datos sobre la calidad del aire  recopilados por sensores, se construyó un modelo para predecir el Índice de Calidad del Aire (AQI). Este utiliza **XGBoost (Gradient Boosting Decision Trees)**  a partir de mediciones de contaminantes atmosféricos. Las variables predictoras son: `CO2_ppm`, `CO_ppm`, `SO2_ppm`, `O3_ppm`, `NO2_ppm`, `PM2_5_ugm3` y `temp_C`. La variable objetivo es `AQI`.
+
+
+# Solución Propuesta
+## Sobre XGBoost
+
+XGBoost (*Extreme Gradient Boosting*) construye un ensamble de árboles de decisión de forma secuencial: cada árbol nuevo corrige los errores del anterior, minimizando una función objetivo que combina pérdida y regularización.
+
+### Predicción
+
+La predicción final es la suma de $K$ árboles:
+
+$$\hat{y}_i = \sum_{k=1}^{K} f_k(x_i), \quad f_k \in \mathcal{F}$$
+
+### Función objetivo
+
+$$\mathcal{L} = \sum_{i=1}^{n} l(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)$$
+
+donde la regularización de cada árbol es:
+
+$$\Omega(f) = \gamma T + \frac{1}{2} \lambda \sum_{j=1}^{T} w_j^2$$
+
+- $T$: número de hojas del árbol  
+- $w_j$: peso (score) de la hoja $j$  
+- $\gamma$: penalización por cada hoja adicional  
+- $\lambda$: penalización L2 sobre los pesos
+
+### Expansión de Taylor (2º orden)
+
+En la iteración $t$, la función objetivo se aproxima como:
+
+$$\mathcal{L}^{(t)} \approx \sum_{i=1}^{n} \left[ g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i) \right] + \Omega(f_t)$$
+
+donde:
+
+$$g_i = \partial_{\hat{y}^{(t-1)}} l(y_i, \hat{y}^{(t-1)}), \qquad h_i = \partial^2_{\hat{y}^{(t-1)}} l(y_i, \hat{y}^{(t-1)})$$
+
+### Peso óptimo de cada hoja
+
+$$w_j^* = -\frac{\sum_{i \in I_j} g_i}{\sum_{i \in I_j} h_i + \lambda}$$
+
+### Ganancia de un split
+
+$$\text{Gain} = \frac{1}{2} \left[ \frac{\left(\sum_{i \in I_L} g_i\right)^2}{\sum_{i \in I_L} h_i + \lambda} + \frac{\left(\sum_{i \in I_R} g_i\right)^2}{\sum_{i \in I_R} h_i + \lambda} - \frac{\left(\sum_{i \in I} g_i\right)^2}{\sum_{i \in I} h_i + \lambda} \right] - \gamma$$
+
+## Construcción del Modelo
+
+Basándose en la construcción anterior, y tras una etapa de optimización de hiperparámetros, se propusieron las características siguientes.
+
+```
+Best Params: {'n_estimators': 100, 'max_depth': None, 'learning_rate': 0.1}
+```
+
+### Rendimiento del modelo
+
+```python
+y_pred_xgb_best = best_model.predict(X_test)
+
+rmse_rbf_best = np.sqrt(mean_squared_error(y_test, y_pred_xgb_best))
+mae_rbf_best  = mean_absolute_error(y_test, y_pred_xgb_best)
+
+print("RBF SVR RMSE:", rmse_rbf_best)
+print("RBF SVR MAE:",  mae_rbf_best)
+```
+
+**Resultados:**
+
+- RBF SVR RMSE: `0.19006254554868413`
+- RBF SVR MAE: `0.06895221024751663`
+
+Se concluye que es un error aceptable.
+
+# Análisis de supuestos y riesgos de XGBoost
+## Supuestos
+
+**Escala**
+
+Los valores (p.ej. `CO2_ppm = 0.997`) son escalados. El modelo asume esta distribución estable. Si se alimenta con datos crudos en producción, las predicciones serán erróneas. Se debe guardar el `StandardScaler` o `MinMaxScaler` junto al modelo.
+
+**Independencia de los Datos**
+
+Los datos son series de tiempo, XGBoost estándar no modela correlación temporal. Lecturas consecutivas de un mismo sensor no son independientes, lo cual viola un supuesto fundamental del modelo. Alternativas posibles de futura mejora serían agregar *lag features* (valores anteriores), o considerar modelos como XGBoost con ventanas deslizantes, LSTM o Prophet.
+
+**Generalización**
+
+Solo se usa el periodo P1. No está demostrado que el modelo generalice a otras ubicaciones o periodos distintos al entrenamiento.
+
+## Riesgos
+
+**Interpretabilididad Ética**
+
+XGBoost no ofrece explicaciones causales. Para decisiones de salud pública se requiere interpretabilidad. Se recomiendan SHAP values para explicar qué variable influye más en cada predicción individual.
+
+**Sobreajuste**
+
+`max_depth=None` (árboles sin límite) fue el mejor parámetro encontrado, lo que podría indicar sobreajuste. El RMSE post-tuning (0.1900) es ligeramente mayor que el inicial (0.1895). Paradoja aparente: el MAE sí mejoró. Esto sugiere que el _tuning_ redujo errores pequeños pero aumentó los errores extremos.
+
+
+## Reflexión sobre el impacto 
+
+### Aplicación en salud pública
+
+Un MAE de 0.069 en una escala normalizada puede traducirse en errores de 1–2 puntos AQI real. Clasificar incorrectamente como "Bueno" un AQI que en realidad es "Moderado" tiene consecuencias para personas con asma u otras enfermedades respiratorias.
+
+El modelo debe también evaluarse en periodos de contaminación extrema (no solo datos promedio), si  funciona bien en condiciones normales pero falla en episodios de smog es éticamente problemático.
+
+Al terminar la etapa actual de construcción del modelo, este adecuado como herramienta de *monitoreo de apoyo, no como único sistema de alerta. Debe complementarse con umbrales duros y validación humana para decisiones críticas. La calidad del aire varía por estaciones del año, eventos industriales y cambios climáticos por lo que se necesita reentrenamiento periódico o detección automática de deriva.
+
+En una nota positiva, el modelo podría prevenir la exposición a contaminantes. Por otra parte, puede funcionar como componente para un sistema automatizado de alertas a la ciudadanía y cumplir el rol de un etiquetado primerizo e inmediato de la calidad del aire, para después ser confirmado por especialistas de ser necesario. Otra gran ventaja es que XGBoosting está construido para ser escalable, lo que veneficiaría mucho si se utilizara como herramienta por alguna organización de seguridad ambiental.
+
+# Referencias
+
+Chen, T., & Guestrin, C. (2016). *XGBoost: A Scalable Tree Boosting System*. KDD '16. <https://doi.org/10.1145/2939672.2939785>
+
+Lundberg, S. M., & Lee, S.-I. (2017). *A Unified Approach to Interpreting Model Predictions* (SHAP). NeurIPS 2017. <https://arxiv.org/abs/1705.07874>
+
+Bergstra, J., & Bengio, Y. (2012). *Random Search for Hyper-Parameter Optimization*. Journal of Machine Learning Research, 13, 281–305. <https://www.jmlr.org/papers/v13/bergstra12a.html>
+
+US EPA. *Air Quality Index (AQI) Basics*. <https://www.airnow.gov/aqi/aqi-basics/>
+
+Molnar, C. (2022). *Interpretable Machine Learning* (2nd ed.). <https://christophm.github.io/interpretable-ml-book/>
