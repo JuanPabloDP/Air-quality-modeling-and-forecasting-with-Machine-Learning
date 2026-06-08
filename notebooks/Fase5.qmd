@@ -122,6 +122,14 @@ Al terminar la etapa actual de construcción del modelo, este adecuado como herr
 
 En una nota positiva, el modelo podría prevenir la exposición a contaminantes. Por otra parte, puede funcionar como componente para un sistema automatizado de alertas a la ciudadanía y cumplir el rol de un etiquetado primerizo e inmediato de la calidad del aire, para después ser confirmado por especialistas de ser necesario. Otra gran ventaja es que XGBoosting está construido para ser escalable, lo que veneficiaría mucho si se utilizara como herramienta por alguna organización de seguridad ambiental.
 
+## Discusión interdisciplinaria para seleccionar el modelo final.
+
+Desde la perspectiva computacional, XGBoost se destacó por su eficiencia y bajo error promedio con un MAE = 0.069, superando al GRU optimizado en ese métrico. Desde la química atmosférica, cabe señalar que las variables predictoras no son independientes entre sí, pues interactúan en reacciones fotoquímicas que varían con la temperatura y las condiciones meteorológicas, lo que puede afectar la confiabilidad del modelo en episodios de contaminación aguda. Por ello, es que XGBoost es una elección adecuada siempre que su uso se acompañe de validación continua y umbrales de alerta definidos con criterio.
+
+## Reflexión individual.
+
+Diana: Trabajar con alguien de química me hizo darme cuenta de que hay decisiones que desde solo mi perspectiva como ingeniera no podría haber tomado igual; la selección de variables fue un ejemplo claro, sin el criterio de la compañera de química Aldana, esa elección hubiera sido puramente estadística y no necesariamente la más representativa del fenómeno real. En general, tener esa perspectiva externa al modelo me ayudó a entender mejor qué estaba prediciendo y por qué, algo que creo que se refleja en la calidad del resultado final. 
+
 # Referencias
 
 Chen, T., & Guestrin, C. (2016). *XGBoost: A Scalable Tree Boosting System*. KDD '16. <https://doi.org/10.1145/2939672.2939785>
