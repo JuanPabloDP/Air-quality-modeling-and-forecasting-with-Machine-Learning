@@ -128,7 +128,17 @@ Desde la perspectiva computacional, XGBoost se destacó por su eficiencia y bajo
 
 ## Reflexión individual.
 
-Diana: Trabajar con alguien de química me hizo darme cuenta de que hay decisiones que desde solo mi perspectiva como ingeniera no podría haber tomado igual; la selección de variables fue un ejemplo claro, sin el criterio de la compañera de química Aldana, esa elección hubiera sido puramente estadística y no necesariamente la más representativa del fenómeno real. En general, tener esa perspectiva externa al modelo me ayudó a entender mejor qué estaba prediciendo y por qué, algo que creo que se refleja en la calidad del resultado final. 
+### Diana
+Trabajar con alguien de química me hizo darme cuenta de que hay decisiones que desde solo mi perspectiva como ingeniera no podría haber tomado igual; la selección de variables fue un ejemplo claro, sin el criterio de la compañera de química Aldana, esa elección hubiera sido puramente estadística y no necesariamente la más representativa del fenómeno real. En general, tener esa perspectiva externa al modelo me ayudó a entender mejor qué estaba prediciendo y por qué, algo que creo que se refleja en la calidad del resultado final. 
+
+### Camila
+
+El desarrollo del proyecto representó la aplicabilidad de distintas aptitudes, siendo una de ellas la  traducción entre disciplinas. A lo largo de este proyecto, la colaboración con individuos familiarizados con el área química resultó fundamental, no sólo para comprender el origen y el comportamiento de las variables, sino para dotar al modelo de sentido físico y contextual. Sin ese puente disciplinario, un modelo estadísticamente aceptable puede convertirse en una herramienta científicamente vacía.
+Desde el lado computacional, es sencillo tratar columnas como indispensables por métricas de rendimiento. Sin embargo, fue la perspectiva química la que permitió entender la indispensabilidad de ciertas mediciones. Este tipo de conocimiento no emerge de los datos por sí solo: requiere diálogo, revisión conjunta y disposición para aprender del otro.
+La colaboración también evidenció los límites de cada campo cuando trabaja de forma aislada. Un modelo con buen desempeño en métricas de error (RMSE, MAE) no garantiza que las predicciones sean útiles en situaciones de contaminación extrema, que son precisamente los escenarios de mayor relevancia para la salud pública. Esa observación, reorientó decisiones sobre validación y alcance del modelo.
+En retrospectiva, este proyecto reforzó la idea de que los modelos de inteligencia artificial aplicados a problemas ambientales y de salud pública deben construirse desde la interdisciplina desde el inicio, no como un paso de validación al final. La calidad de los datos, la selección de variables, la interpretación de los resultados y la comunicación de las limitaciones son tareas que se enriquecen profundamente cuando se realizan en conjunto entre perfiles técnicos y científicos. El resultado no es solo un modelo más robusto, sino un trabajo más honesto sobre lo que el modelo puede y no puede hacer.
+
+
 
 # Referencias
 
