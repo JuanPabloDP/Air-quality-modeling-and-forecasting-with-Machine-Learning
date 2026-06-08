@@ -139,6 +139,14 @@ La colaboración también evidenció los límites de cada campo cuando trabaja d
 En retrospectiva, este proyecto reforzó la idea de que los modelos de inteligencia artificial aplicados a problemas ambientales y de salud pública deben construirse desde la interdisciplina desde el inicio, no como un paso de validación al final. La calidad de los datos, la selección de variables, la interpretación de los resultados y la comunicación de las limitaciones son tareas que se enriquecen profundamente cuando se realizan en conjunto entre perfiles técnicos y científicos. El resultado no es solo un modelo más robusto, sino un trabajo más honesto sobre lo que el modelo puede y no puede hacer.
 
 
+### Gonzalo Higuera
+
+Durante esta fase comprendí mejor la diferencia entre obtener buenas métricas y construir un modelo que realmente pueda utilizarse de manera responsable. Aunque XGBoost logró errores bajos (RMSE y MAE reducidos), el análisis mostró que el desempeño numérico por sí solo no garantiza una solución completa al problema.
+
+Asimismo, aprendí que el proceso de ajuste de hiperparámetros no siempre produce mejoras uniformes en todas las métricas. En este caso, algunas métricas mejoraron mientras que otras permanecieron prácticamente iguales, lo que demuestra que la evaluación debe realizarse desde múltiples perspectivas y no únicamente con un solo indicador.
+
+Finalmente, considero que este proyecto fortaleció mi comprensión de los modelos de aprendizaje automático aplicados a problemas reales. También me permitió reflexionar sobre la responsabilidad asociada al uso de modelos predictivos en contextos relacionados con la calidad del aire y la salud pública.
+
 
 # Referencias
 
